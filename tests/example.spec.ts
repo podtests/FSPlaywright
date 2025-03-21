@@ -1,21 +1,29 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  test.setTimeout(120000);
-  await page.goto('https://playwright.dev/');
+/*
+test('tc3', async (param)=> {
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+    let p1 = param['page'];
+  await p1.goto('https://podtest.in');
+});
+*/
+
+test('tc3', async ({page })=> {
+  await page.goto('https://podtest.in');
+
+  let context = page.context();
+
+  let p2 = await context.newPage();
+
+  await p2.goto("https://youtube.com/@podtest");
+
+  let browser = context.browser();
+  let c2 = await browser?.newContext();
+
+  let p3 = await c2?.newPage();
+  await p3.goto("https://www.udemy.com/course/selenium-java-from-zero-to-hero");
+
+
 });
 
 
-
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
