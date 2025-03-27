@@ -10,10 +10,15 @@ test('tc3', async (param)=> {
 
 test.use({viewport: { width: 600, height: 900 }, acceptDownloads: false});
 
-test('tc3', async ({page })=> {
+test('tc3', async ({page }, testInfo)=> {
 
+  console.log("WI",testInfo.workerIndex);
+
+  console.log("PI", testInfo.parallelIndex);
+
+  
   await page.goto('https://podtest.in');
-
+/*
   let context = page.context();
 
   let p2 = await context.newPage();
@@ -25,7 +30,7 @@ test('tc3', async ({page })=> {
 
   let p3 = await c2?.newPage();
   //await p3.goto("https://www.udemy.com/course/selenium-java-from-zero-to-hero");
-
+*/
 
 });
 

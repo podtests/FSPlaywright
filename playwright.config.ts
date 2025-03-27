@@ -1,9 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+
   testDir: './tests',
   
   fullyParallel: true,
+  globalSetup: './globalsetup',
+  globalTeardown: './globalteardown',
+  //testMatch: ['tests/tf1.spec.ts'],
+  testIgnore: ['tests/tf2.spec.ts'],
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -15,7 +20,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+     baseURL: 'https://youtube.com',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
@@ -33,7 +38,10 @@ export default defineConfig({
 
     {
       name: 'chrome Brand Browser',
-      use: { ...devices['Desktop Chrome'], channel: "chrome"},
+      use: { ...devices['Desktop Chrome'], channel: "chrome",
+        baseURL: "https://udemy.com"
+      },      
+      //testMatch: "./tests/dummy.*"
     },
 
     //{
@@ -68,7 +76,7 @@ export default defineConfig({
   ],
 
   expect: {
-    
+
   }
 
 });
