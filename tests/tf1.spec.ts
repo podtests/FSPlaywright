@@ -49,4 +49,13 @@ test("testcase2: ", async ({page}, testInfo)=>{
     //console.log(testInfo.title,);
 })
 
+test("testcase3: ", async ({page, browser, context}, testInfo)=>{
+
+    await browser.newContext();
+
+    await page.goto("https://youtube.com");
+    console.log(testInfo.title, `${testInfo.workerIndex}-${testInfo.parallelIndex}` );
+    //console.log(testInfo.title,);
+})
+
 

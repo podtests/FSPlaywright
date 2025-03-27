@@ -5,10 +5,10 @@ export default defineConfig({
   testDir: './tests',
   
   fullyParallel: true,
-  globalSetup: './globalsetup',
-  globalTeardown: './globalteardown',
-  //testMatch: ['tests/tf1.spec.ts'],
-  testIgnore: ['tests/tf2.spec.ts'],
+  globalSetup: require.resolve('./globalsetup.ts'),
+  globalTeardown: require.resolve('./globalteardown.ts'),
+  testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
+  //testIgnore: ['tests/tf2.spec.ts'],
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -37,11 +37,33 @@ export default defineConfig({
     */
 
     {
-      name: 'chrome Brand Browser',
+        name: 'setupproject',
+        use: { ...devices['Desktop Chrome'], channel: "chrome",
+          baseURL: "https://udemy.com"
+        },
+        testMatch: ['tests/tf3.spec.ts']
+
+    },
+
+    {
+      name: 'tearDownproject',
       use: { ...devices['Desktop Chrome'], channel: "chrome",
         baseURL: "https://udemy.com"
-      },      
+      },
+      testMatch: ['tests/tf4.spec.ts']
+    },
+
+
+    {
+      name: 'chrome-Brand-Browser',
+      use: { ...devices['Desktop Chrome'], channel: "chrome",
+        baseURL: "https://udemy.com"
+      }, 
+      dependencies: ['setupproject'],
+      testMatch: ['tests/tf1.spec.ts'],
+      teardown:  'tearDownproject'   
       //testMatch: "./tests/dummy.*"
+      
     },
 
     //{
