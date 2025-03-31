@@ -66,6 +66,16 @@ export default defineConfig({
       
     },
 
+    {
+      name: 'chrome',
+      use: { ...devices['Desktop Chrome'], channel: "chrome",
+        baseURL: "https://udemy.com"
+      },     
+      testMatch: ['tests/e2e.spec.ts'],    
+      //testMatch: "./tests/dummy.*"
+      
+    },
+
     //{
      // name: 'firefox',
      // use: { ...devices['Desktop Firefox'] },
