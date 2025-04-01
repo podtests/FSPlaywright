@@ -4,7 +4,7 @@ export default defineConfig({
 
   testDir: './tests',
   
-  fullyParallel: true,
+  fullyParallel: false,
   globalSetup: require.resolve('./globalsetup.ts'),
   globalTeardown: require.resolve('./globalteardown.ts'),
   testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
