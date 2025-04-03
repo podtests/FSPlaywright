@@ -1,4 +1,4 @@
-import {BrowserContext, Cookie, test} from '@playwright/test';
+import {BrowserContext, Cookie, Page, test} from '@playwright/test';
 
 test.skip("tc1", async ({ browser  })=>{
 
@@ -67,7 +67,7 @@ test.skip("tc1", async ({ browser  })=>{
 
 })
 
-test("tc2", async ({context}) =>{
+test.skip("tc2", async ({context}) =>{
 
     //let c1 = await browser.newContext();  //a new chrome session
 
@@ -145,4 +145,185 @@ if(cookies2.length == 0) {
    
 
 
+})
+
+test.skip("tc3", async ({context, browser, page}) =>{
+
+    /*
+    const newBCPromise = context.waitForEvent('close');   
+    console.log("pre Bc count is", browser.contexts().length);
+    
+    await context.close();
+    let bc2 = await newBCPromise;
+    console.log("post Bc count is", browser.contexts().length);
+
+   // await p1.goto("https://podtest.in");
+   
+   let newPagePromise = context.waitForEvent('page');   
+   console.log("pre page count is", context.pages().length);
+   
+   await context.newPage();
+   let p2 = await newPagePromise;
+   await p2.goto("https://podtest.in");
+
+   await context.newPage();
+
+   let p3 = await newPagePromise;
+   await p3.goto("https://youtube.com");
+   //console.log("post Bc count is", browser.contexts().length);
+*/    
+
+   let cmPromise = context.waitForEvent('console');
+   await page.goto("https://podtest.in");
+    await page.evaluate(()=>{console.log("Hello Akhil")})
+    await page.evaluate(()=>{console.log("Hello Shilpi")})
+
+    let cMessage = await cmPromise;
+    let p = cMessage.page()
+    console.log("page title is",await p?.title());
+    console.log("gtext is: ",cMessage.text());
+
+
+/*
+context.on('console' ,  (cm)=>{
+    console.log("logged message is: ", cm.text());
+});
+await page.goto("https://podtest.in");
+ await page.evaluate(()=>{console.log("Hello Akhil")})
+ await page.evaluate(()=>{console.log("Hello Shilpi")})
+*/
+
+
+
+})
+
+test.skip("tc4", async ({context, browser})=>{
+
+    
+
+    context.on("close", async ()=>{
+      //c3 = await browser.newContext();
+      if (browser.isConnected()) {
+        console.log("Browser is stil connected!");
+        let c3 : BrowserContext = await browser.newContext();
+        let p2 = await c3.newPage();
+        await p2.goto("https://udemy.com");
+      }
+
+       console.log("browserContext got closed!"); 
+    })
+
+    console.log("Execution started!")
+
+    let p1 = await context.newPage();
+    await p1.goto("https://podtest.in");
+
+    //console.log(c3); 
+
+    await context.close();
+
+    console.log("Execution ended!");
+
+   
+
+    //console.log(c3); 
+/*
+    let c2 = await browser.newContext();
+
+    console.log("Execution started Again!")
+
+    let p3 = await c2.newPage();
+
+    await p3.goto("https://youtube.com");
+
+    await c2.close();
+
+    console.log("Execution Ended Again!")
+*/
+
+
+
+
+
+
+})
+
+
+test.skip("tc5", async ({context, page})=>{
+
+    context.on('page', async (p)=>{
+        let viewport = p.viewportSize()
+        await p.goto("https://youtube.com");
+
+        console.log("New Page created!", viewport);
+    })
+
+    let p1 = await context.newPage();
+
+    let p2 = await context.newPage();
+
+    await page.pause();
+})
+
+
+test.skip("tc6", async ({context})=>{
+
+    context.on('console', async (cm) =>{
+
+        let p2 = cm.page();
+        let title = await p2?.title();
+        await p2?.goto("https://udemy.com");
+
+
+        if (title.includes("PodTest")){
+
+            console.log(cm.text(), cm.type(), title);
+        }               
+        //console.log("Console event triggered!")
+    })
+
+    let p1 = await context.newPage();
+    await p1.goto("https://podtest.in");
+
+    await p1.evaluate(()=>{
+        console.log("Akhil jain");
+    })
+
+    await p1.pause();
+
+})
+
+
+test("tc7", async ({context})=>{
+/*
+    //step1:  registering a listener
+    context.on("page", 
+        
+        //step3: action to be taken
+        (p)=>{
+        console.log("new page created!");        
+    }
+)
+*/
+    
+    
+//step1: registering a listener
+    let p =  context.waitForEvent('page');
+
+    //step2 :event fired & listerner would be notified
+    let p1 = await context.newPage();
+
+    await (await p).goto("https://youtube.com");
+
+    let p2 = await context.newPage();
+
+    await (await p).goto("https://youtube.com");
+
+    await (await p).pause();
+
+
+    //await p1.goto("https://podtest.in")
+
+    //let p2 = await context.newPage();
+    //await p2.goto("https://udemy.com")
 })
