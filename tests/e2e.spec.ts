@@ -1,4 +1,4 @@
-import {BrowserContext, Cookie, Page, test} from '@playwright/test';
+import {BrowserContext, Cookie, Page, test, Browser} from '@playwright/test';
 
 test.skip("tc1", async ({ browser  })=>{
 
@@ -294,25 +294,54 @@ test.skip("tc6", async ({context})=>{
 })
 
 
-test("tc7", async ({context})=>{
-/*
+test.skip("tc7", async ({context})=>{
+
     //step1:  registering a listener
-    context.on("page", 
-        
-        //step3: action to be taken
-        (p)=>{
-        console.log("new page created!");        
-    }
-)
-*/
+    /*
+    context.on("console", 
+       async (cm)=>{               
+        console.log("new console receieved created!", cm.text() );
+      }        
+    )
+      */
+
+    let cm =  context.waitForEvent('console');
+
+    let p1 = await context.newPage();
+    await p1.goto("https://podtest.in")    ;
+
+    await p1.evaluate(()=>{
+        console.log("Hello Akhil");
+    })
+
+    console.log("new console receieved created!",(await cm).text());
+
+    let cm2 =  context.waitForEvent('console');
+
+    await p1.evaluate(()=>{
+        console.log("Hello podtest");
+    })
+
+    console.log("new console receieved created!",(await cm2).text());
+
+
+   
+
+
+
+
+
+
+
     
     
 //step1: registering a listener
-    let p =  context.waitForEvent('page');
+    //let p =  context.waitForEvent('page');
 
     //step2 :event fired & listerner would be notified
-    let p1 = await context.newPage();
+    //let p1 = await context.newPage();
 
+/*
     await (await p).goto("https://youtube.com");
 
     let p2 = await context.newPage();
@@ -326,4 +355,38 @@ test("tc7", async ({context})=>{
 
     //let p2 = await context.newPage();
     //await p2.goto("https://udemy.com")
+    */
 })
+
+test("tc8",async ({page})=>{
+   
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.locator("//input[@name='email']").fill("akhiljda@gmail.com");
+
+    await page.locator("[name='password']").fill("Password");
+
+    await page.locator("button[type='submit']").click();
+
+    await page.pause();
+})
+
+//import { test, expect } from '@playwright/test';
+
+test('test', async ({ page }) => {
+  await page.locator('body').click({
+    button: 'right'
+  });
+  await page.locator('body').click();
+  await page.locator('body').click();
+  await page.goto('https://demo.evershop.io/account/login');
+  await page.getByRole('textbox', { name: 'Email' }).click();
+  await page.getByRole('textbox', { name: 'Email' }).dblclick();
+  await page.getByRole('textbox', { name: 'Email' }).fill('akhiljda@gmail.com');
+  await page.getByRole('textbox', { name: 'Email' }).press('Tab');
+  await page.getByRole('textbox', { name: 'Password' }).click();
+  await page.getByRole('textbox', { name: 'Password' }).fill('Password');
+  await page.getByRole('textbox', { name: 'Password' }).press('Tab');
+  await page.getByRole('button', { name: 'SIGN IN' }).press('Enter');
+  await page.getByRole('button', { name: 'SIGN IN' }).click();
+});
