@@ -358,11 +358,16 @@ test.skip("tc7", async ({context})=>{
     */
 })
 
-test("tc8",async ({page})=>{
+test.skip("tc8",async ({page})=>{
    
     await page.goto("https://demo.evershop.io/account/login");
 
-    await page.locator("//input[@name='email']").fill("akhiljda@gmail.com");
+    let loc =  page.locator("//input[@name='email']");
+    await loc.fill("akhiljda@gmail.com");
+
+    page.getByAltText("Akhil Jain", {exact: false});
+
+    //page.getByLabel()
 
     await page.locator("[name='password']").fill("Password");
 
@@ -373,7 +378,7 @@ test("tc8",async ({page})=>{
 
 //import { test, expect } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test.skip('test', async ({ page }) => {
   await page.locator('body').click({
     button: 'right'
   });
@@ -389,4 +394,18 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Password' }).press('Tab');
   await page.getByRole('button', { name: 'SIGN IN' }).press('Enter');
   await page.getByRole('button', { name: 'SIGN IN' }).click();
+
+  
+});
+
+
+test("tc10",async ({page})=>{
+   
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.getByPlaceholder("Email", {exact: true}).fill("akhiljda@gmail.com");
+
+   // await page.pause();
+
+   
 });
