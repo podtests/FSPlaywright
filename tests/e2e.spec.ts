@@ -399,7 +399,7 @@ test.skip('test', async ({ page }) => {
 });
 
 
-test("tc10",async ({page})=>{
+test.skip("tc10",async ({page})=>{
    
     await page.goto("https://demo.evershop.io/account/login");
 
@@ -409,3 +409,166 @@ test("tc10",async ({page})=>{
 
    
 });
+
+test.skip("tc13",async ({page, context})=>{
+
+    //context.waitForEvent()
+   
+    await page.setViewportSize({width: 450, height: 500});
+
+    await page.opener()
+
+    await page.goto("https://demo.evershop.io/account/login");
+    
+    await context.newPage();
+
+    await context.newPage();
+
+    await page.reload();
+
+    console.log("url is", page.url());
+
+    let title = await  page.title();
+    console.log("title is ", title);
+    
+    await page.bringToFront();
+
+    await page.goto("https://facebook.com");
+
+    await page.close();
+
+    let isClosed = page.isClosed();
+    console.log("Is it closed?: ",isClosed);
+
+    console.log("vpsize", page.viewportSize());
+
+    
+
+
+    
+    await page.getByPlaceholder("Email", {exact: true}).fill("akhiljda@gmail.com");
+
+   // await page.pause();
+
+   
+});
+
+test.skip("tc14", async ({page})=>{
+
+    let browserContext = page.context();
+
+    await page.goto("https://facebook.com");
+
+    await page.reload();
+
+    console.log("url opened is:", page.url());
+
+    let title = await page.title();
+    console.log("title is:", title);
+
+    await page.goto("https://podtest.in");
+
+    await page.goBack();
+
+    await page.goForward();
+
+    let isClosed = page.isClosed();
+
+    console.log("Is my page closed?", isClosed);
+
+    await page.close();
+
+    isClosed = page.isClosed();
+
+    console.log("Is my page closed now?", isClosed);
+
+    let p2 = await browserContext.newPage();
+
+    await p2.goto("https://youtube.com/@podtest");
+
+});
+
+test.skip("tc15", async ({page})=>{
+
+    await page.goto("https://podtest.in");
+
+    let p2 = await page.context().newPage();
+
+    await p2.goto("https://facebook.com")
+
+    let p3 = await page.context().newPage();
+
+    await page.goto("https://youtube.com");    
+
+    await page.bringToFront();
+
+    console.log("size of p1 is: ",page.viewportSize())
+
+    await page.setViewportSize({width: 500, height: 400});
+
+    console.log("size of p1 is: ",page.viewportSize())
+
+    console.log("size of p2 is: ",p2.viewportSize())
+
+    await page.pause();
+
+
+
+   
+
+})
+
+test.skip("tc16", async ({page})=>{
+    await page.goto("https://demo.evershop.io/account/login",{waitUntil: "networkidle"});
+
+    await page.locator("[name='email']").fill("akhiljda@gmail.com");
+
+    await page.pause();
+
+
+})
+
+test.skip("tc17", async ({page})=>{
+
+    /*
+    page.on('domcontentloaded', async (page)=>{       
+        console.log("domcontentloaded");
+    })
+        */
+
+    let p2 = page.waitForEvent('domcontentloaded');
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    let title = await (await p2).title();
+    console.log("Title of the page is: ", title);
+
+    await page.goto("https://youtube.com");
+
+    //await page.locator("[name='email']").fill("akhiljda@gmail.com");
+
+    await page.pause();
+
+
+})
+
+test("tc18", async ({page})=>{
+
+
+    await page.goto("https://demo.evershop.io/account/login",{waitUntil: 'domcontentloaded'});
+
+    await page.waitForLoadState('load');
+
+
+
+   // let title = await (await p2).title();
+    console.log("Title of the page is: ", title);
+
+    await page.goto("https://youtube.com");
+
+    //await page.locator("[name='email']").fill("akhiljda@gmail.com");
+
+    await page.pause();
+
+
+})
