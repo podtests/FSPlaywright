@@ -552,7 +552,7 @@ test.skip("tc17", async ({page})=>{
 
 })
 
-test("tc18", async ({page})=>{
+test.skip("tc18", async ({page})=>{
 
 
     await page.goto("https://demo.evershop.io/account/login",{waitUntil: 'domcontentloaded'});
@@ -562,7 +562,7 @@ test("tc18", async ({page})=>{
 
 
    // let title = await (await p2).title();
-    console.log("Title of the page is: ", title);
+   // console.log("Title of the page is: ", title);
 
     await page.goto("https://youtube.com");
 
@@ -570,5 +570,69 @@ test("tc18", async ({page})=>{
 
     await page.pause();
 
+
+})
+
+test("tc19", async ({page})=>{
+  await page.goto("https://demo.evershop.io/account/login");
+  /*  
+  let l1 = page.locator("[name='email']");    
+
+    await l1.fill("akhil");
+    await l1.clear();
+
+    let bb = await l1.boundingBox();
+
+    console.log("boundingBox: ", bb);
+*/
+   let l1 = page.locator("input");
+
+   let count = await l1.count();
+
+   console.log("ele count", count);
+
+   for(const ele of await l1.all()){
+
+        await ele.fill("Podtest")
+   }
+
+   await l1.nth(0).fill("akhil");
+
+    await l1.first().fill("Jain");
+
+    await l1.last().fill("Udemy");
+
+    let p1 = l1.page();
+
+    let l2 = page.locator("button[type='submit']");
+
+    let classtext = await l2.getAttribute("class");
+
+    console.log("clastextx is:", classtext); //buuton primary
+
+    console.log("inner HTML is:", await l2.innerHTML()); //<span>sign in</span>
+    console.log("inner text is:", await l2.innerText()); //sign in
+
+    console.log("isEnabled:", await l2.isEnabled()); //gt
+    console.log("isDisabled:", await l2.isHidden()); //f
+
+
+
+    
+
+
+
+
+    await page.pause();
+})
+
+test.skip("tc20", async ({page})=>{
+    await page.goto("https://testautomationpractice.blogspot.com/");
+
+    await page.locator("input#monday").check();
+
+    await page.pause();
+    
+    await page.locator("input#monday").uncheck();
 
 })
