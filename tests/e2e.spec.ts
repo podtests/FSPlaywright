@@ -1,5 +1,9 @@
 import {BrowserContext, Cookie, Page, test, Browser} from '@playwright/test';
 
+test.use({navigationTimeout: 30000,
+    actionTimeout: 20000
+});
+
 test.skip("tc1", async ({ browser  })=>{
 
 
@@ -573,7 +577,7 @@ test.skip("tc18", async ({page})=>{
 
 })
 
-test("tc19", async ({page})=>{
+test.skip("tc19", async ({page})=>{
   await page.goto("https://demo.evershop.io/account/login");
   /*  
   let l1 = page.locator("[name='email']");    
@@ -634,5 +638,94 @@ test.skip("tc20", async ({page})=>{
     await page.pause();
     
     await page.locator("input#monday").uncheck();
+
+})
+
+test.skip("tc21", async ({page})=>{
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.locator("input[name='email']").fill("akhiljda@gmail.com");
+    await page.locator("input[name='password']").fill("Password");
+    await page.locator("button[type='submit']").click();
+
+    await page.waitForSelector("//a/span[text()='Shop kids']");
+
+    await page.waitForLoadState("load");
+
+    await page.goto("https://demo.evershop.io/checkout");
+    //await page.locator("select[id='address[country]']").selectOption("CN");
+
+    await page.locator("select[id='address[country]']").click();
+    //await page.waitForTimeout(10000);
+    let eles = await page.locator("select[id='address[country]'] option").all();
+
+    for(const ele of eles){
+        console.log("country name is:", await ele.innerText());
+    }
+    await page.locator("//option[@value='CN']").click({force: true});
+    await page.locator("select[id='address[country]']").click();
+
+    await page.pause();
+})
+
+
+test.skip("tc25", async ({page})=>{
+    await page.goto("https://www.globalsqa.com/demo-site/select-dropdown-menu/");
+    await page.locator("//select").click();
+
+    await page.waitForSelector("//option[text()='Andorra']");
+
+    await page.locator("//option[text()='Andorra']").click();
+    await page.locator("//select").click();
+
+    await page.pause();
+})
+
+
+test.skip("tc26", async ({page, context})=>{
+
+    context.setDefaultNavigationTimeout(40000);
+    context.setDefaultTimeout(30000);
+
+    page.setDefaultNavigationTimeout(30000);
+    page.setDefaultTimeout(20000);
+
+    let p2 = await context.newPage();
+
+    p2.goto("https://podtest.in")
+    test.setTimeout(20000);
+
+    await page.goto("https://demo.evershop.io/account/login");  //per action level
+
+
+    await page.goto("https://demo.evershop.io/account/login");  //per action level
+
+    //await page.goto("https://youtube.com/@podtest");  //no timeoit
+
+    let l1 = page.locator("input[name='email']");
+
+    await l1.fill("akhil"); //auto waiting
+})
+
+test("tc27", async ({page})=>{
+
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.locator("input[name='email']").fill("akhiljda@gmail.com");
+    await page.locator("input[name='password']").fill("Password");
+    await page.locator("button[type='submit']").click();
+
+    let l1 = page.locator("//a/span[text()='Shop kids']");
+
+
+    await l1.waitFor({state: 'visible', timeout: 50000});
+
+    //await page.waitForURL("https://demo.evershop.io/", {timeout: 10000, waitUntil: 'load'});
+
+    await page.goto("https://demo.evershop.io/checkout");
+
+    //await page.locator("//input[@name='address[full_name]']").fill("Akhil");
+
 
 })

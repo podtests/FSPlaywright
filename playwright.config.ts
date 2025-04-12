@@ -5,9 +5,12 @@ export default defineConfig({
   testDir: './tests',
   
   fullyParallel: false,
+  globalTimeout: 360000,
+  timeout: 40*1000,
   globalSetup: require.resolve('./globalsetup.ts'),
   globalTeardown: require.resolve('./globalteardown.ts'),
   testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
+  
   //testIgnore: ['tests/tf2.spec.ts'],
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
@@ -24,7 +27,9 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: false
+    headless: false, 
+    navigationTimeout: 40000,
+    actionTimeout: 30000,
   },
 
   /* Configure projects for major browsers */
