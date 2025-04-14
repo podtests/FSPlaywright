@@ -709,7 +709,7 @@ test.skip("tc26", async ({page, context})=>{
     await l1.fill("akhil"); //auto waiting
 })
 
-test("tc27", async ({page})=>{
+test.skip("tc27", async ({page})=>{
 
 
     await page.goto("https://demo.evershop.io/account/login");
@@ -763,5 +763,99 @@ test("tc27", async ({page})=>{
     console.log("Table data is:", rowsData);
     
 
+
+})
+
+
+test.skip("tc28_dropdown", async ({page})=>{
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.locator("input[name='email']").fill("akhiljda@gmail.com");
+    await page.locator("input[name='password']").fill("Password");
+    await page.locator("button[type='submit']").click();
+
+    let l1 = page.locator("//a/span[text()='Shop kids']");
+
+    await l1.waitFor({state: 'visible', timeout: 50000});
+    await page.goto("https://demo.evershop.io/checkout");
+
+    await page.locator("//select[@id='address[country]']").selectOption("CN");
+    await page.locator("//select[@id='address[country]']").selectOption({label: 'India'});
+
+    await page.pause();
+
+})
+
+test("tc29_webtable", async ({page})=>{
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await page.locator("input[name='email']").fill("akhiljda@gmail.com");
+    await page.locator("input[name='password']").fill("Password");
+    await page.locator("button[type='submit']").click();
+
+    let l1 = page.locator("//a/span[text()='Shop kids']");
+
+    await l1.waitFor({state: 'visible', timeout: 50000});
+    await page.goto("https://demo.evershop.io/cart");
+
+    let columnCount = await page.locator("table thead tr td").count();
+    console.log("Coulmn count is:", columnCount);
+
+    let columns = await page.locator("table thead tr td").all();
+
+    let columnNames : string[] = [];
+
+    /*
+    await columns.map(async (column)=>{
+        let columnName = await column.locator("span").innerText();
+        console.log("Map: columnName is:", columnName);
+        columnNames.push(columnName);
+    })
+
+    columnNames.forEach((colName)=>{
+        console.log("column name is:", colName);
+    })
+*/
+    
+    for(const column of columns){
+        let columnName = await column.locator("span").innerText();
+        columnNames.push(columnName);
+       //console.log("Col name is", );
+    }
+
+    columnNames.forEach((colName)=>{
+        console.log("column name is:", colName);
+    })
+
+
+    //Row data:
+    let rowCount = await page.locator("table tbody tr").count();
+    console.log("RowCount is: ", rowCount);
+
+
+    let rows = await page.locator("table tbody tr").all();
+
+    let rowsContent : string[][] = [];
+
+    for(const row of rows){
+
+        let rowContent: string[] =[];
+
+        rowContent.push(await row.locator("//td[1]//div[@class='cart-tem-info']/a").innerText());
+        rowContent.push(await row.locator("//td[2]//div/span[@class='sale-price']").innerText());
+        rowContent.push(await row.locator("//td[3]//input").getAttribute("value")??"no data");
+        rowContent.push(await row.locator("//td[4]//span").innerText());   
+        
+        rowsContent.push(rowContent);
+    }
+
+    rowsContent.forEach((row)=>{
+        console.log("Row data : ", row);
+    })
+
+
+    await page.pause();
 
 })
