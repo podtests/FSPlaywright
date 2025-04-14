@@ -1,8 +1,10 @@
 import {BrowserContext, Cookie, Page, test, Browser} from '@playwright/test';
 
+/*
 test.use({navigationTimeout: 30000,
     actionTimeout: 20000
 });
+*/
 
 test.skip("tc1", async ({ browser  })=>{
 
@@ -718,14 +720,48 @@ test("tc27", async ({page})=>{
 
     let l1 = page.locator("//a/span[text()='Shop kids']");
 
-
     await l1.waitFor({state: 'visible', timeout: 50000});
+    await page.goto("https://demo.evershop.io/cart");
 
-    //await page.waitForURL("https://demo.evershop.io/", {timeout: 10000, waitUntil: 'load'});
+    let headers = await page.locator(".items-table thead tr td").all();
+    let headerCount = await page.locator(".items-table thead tr td").count();
 
-    await page.goto("https://demo.evershop.io/checkout");
+    console.log("Headers count is:", headerCount);
+    console.log("header count is", headers.length);
 
-    //await page.locator("//input[@name='address[full_name]']").fill("Akhil");
+    let headerName: string[] =[];
+
+
+    for(const header of headers){
+        let val = await header.locator("span").innerText();
+        console.log("col name is:", val);
+        headerName.push(val);
+    }
+
+    console.log("header array is:", headerName);
+
+    headerName.forEach(e=>console.log("header is:" ,e));
+
+    let rows = await page.locator(".items-table tbody tr").all();
+
+    //work on row1
+
+    let rowsData : string[][] = [];
+
+    for(const row of rows){
+        let cols = await row.locator("td").all();
+
+        let rowData: string[] = [];
+        rowData.push(await cols[0].locator("div.cart-tem-info a.name").innerText());
+        rowData.push(await cols[1].locator("span.sale-price").innerText());
+        rowData.push(await cols[2].locator("input[type='text']").getAttribute("value")?? "0");
+        rowData.push(await cols[3].locator("span").innerText());
+
+        rowsData.push(rowData);
+    }
+
+    console.log("Table data is:", rowsData);
+    
 
 
 })
