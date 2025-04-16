@@ -860,3 +860,49 @@ test.skip("tc29_webtable", async ({page})=>{
 
 })
 
+test.skip("tabs", async ({page})=>{
+
+    await page.goto("https://selectorshub.com/xpath-practice-page/");
+    const newPagePromise = page.context().waitForEvent('page')
+    await page.locator("(//a[contains(@href,'testrigor')])[2]").click();
+    const newPage = await newPagePromise;
+   
+    let pages = page.context().pages();
+    console.log("pages count ", pages.length);
+
+    for(const p of pages){
+        let title = await p.title();
+        console.log("title is",title);
+
+        if(title.includes('Xpath')){
+            console.log("I went here!");
+            await p.bringToFront();
+        }
+    }
+
+    await page.pause();
+
+
+
+
+
+
+
+})
+
+test("iframes", async ({page})=>{
+    await page.goto("https://selectorshub.com/iframe-scenario/");
+
+
+    const frame1 = page.frameLocator('#pact1')
+
+    await frame1.locator("input[placeholder='First Crush']").fill("Akhil Jain");
+    //await page.locator("input[placeholder='First Crush']").fill("Akhil Jain");
+
+    const frame2 = frame1.frameLocator('#pact2')
+
+    await frame2.locator("input[placeholder='Current Crush Name']").fill("podtest");
+    
+
+    await page.pause();
+} )
