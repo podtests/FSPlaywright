@@ -787,7 +787,7 @@ test.skip("tc28_dropdown", async ({page})=>{
 
 })
 
-test("tc29_webtable", async ({page})=>{
+test.skip("tc29_webtable", async ({page})=>{
 
     await page.goto("https://demo.evershop.io/account/login");
 
@@ -859,3 +859,4 @@ test("tc29_webtable", async ({page})=>{
     await page.pause();
 
 })
+
