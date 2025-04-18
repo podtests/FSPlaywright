@@ -906,3 +906,141 @@ test("iframes", async ({page})=>{
 
     await page.pause();
 } )
+
+test("iframes2", async ({page})=>{
+    await page.goto("https://selectorshub.com/iframe-scenario/");
+
+    let frames =  page.frames();
+    console.log("Frame count is: ", frames.length);
+
+    await page.keyboard.press('control')
+
+    for (const frame of frames){
+        console.log("-------Frame content is:-----------", frame.url())
+        //const content = await frame.content();
+        //console.log(content);        
+        console.log("------------------------------------")
+    }
+    
+    const frame2 = frames[1].frameLocator('#pact2');
+
+    frames[1].frameElement()
+
+    await frame2.locator("input[placeholder='Current Crush Name']").fill("Ayansh Jain");
+
+    /*
+    let frame0text = await frames[0].locator("h4.elementor-heading-title a").innerText();
+    console.log("frame0text is: ", frame0text);
+
+    let frame1text = await frames[1].locator("input[id='inp_val']").getAttribute("placeholder");
+    await frames[1].locator("input[id='inp_val']").fill("Akhil Jain")
+    console.log("frame1text is: ", frame1text);
+
+    let childframes1 =  frames[1].childFrames();
+    console.log("childframes1 count is: ", childframes1.length);
+
+    let frame2text = await frames[2].locator("input[placeholder='Current Crush Name']").getAttribute("placeholder");
+    await frames[2].locator("input[placeholder='Current Crush Name']").fill("PodTest");
+    console.log("frame2text is: ", frame2text);
+
+    await frames[3].locator("input[id='glaf']").fill("Shilpi Jain")
+
+    let childframes2 =  frames[3].childFrames();
+    console.log("childframes3 count is: ", childframes2.length);
+*/
+
+    await page.pause();
+
+    
+
+})
+
+
+test("iframe3", async ({page})=>{
+    await page.goto("https://selectorshub.com/iframe-scenario/");
+    
+    //Approach1: Framelocator
+    /*
+    const frame1 = page.frameLocator("//iframe[@id='pact1']");
+    await frame1.locator("input[placeholder='First Crush']").fill("Akhil Jain");
+*/
+    //Approach2: Frame
+    //let frame1 = page.frame({url: "https://selectorshub.com/iframe-and-nested-iframe/"});
+
+    let frame1 = page.frame({name: 'pact1'});
+    if(frame1){
+        await frame1.locator("input[placeholder='First Crush']").fill("Akhil Jain");
+        let cFrames = frame1.childFrames()
+        console.log('cFrames are: ', cFrames.length);  //1
+        console.log('cFrame URL is:', cFrames[0].url());
+
+        let isDetached =  frame1.isDetached();
+        console.log('isDetached is: ', isDetached);
+
+        let name = frame1.name();
+        console.log("frame1.name()", name);
+
+        let pFrame = frame1.parentFrame();
+        console.log("pFrame URL is: ", pFrame?.url());
+
+
+
+
+    }
+    await page.pause();
+})
+
+test("iframe4", async ({page})=>{
+        await page.goto("https://selectorshub.com/iframe-scenario/");
+
+        await page.waitForTimeout(5000);
+
+        let frames = page.frames();
+
+        console.log("total frames are: ", frames.length);
+
+        await frames[3].locator("input[id='glaf']").fill("podtest");
+
+        await page.pause();
+})
+
+test("keyboard", async ({page})=>{
+    await page.goto('https://demo.evershop.io/account/login');
+
+    //await page.locator("input[name='email']").fill("Akhil jain");
+    await page.locator("input[name='email']").click({button: 'left'});
+    await page.keyboard.type("Akhil Jain");
+
+    await page.locator(".login-form-inner h1").dblclick();
+    
+    //await page.keyboard.down('Control+c');
+    //await page.keyboard.up('Control+c');
+    await page.keyboard.press('Control+c');
+
+    await page.locator("input[name='email']").click();
+    await page.keyboard.press('Control+v');
+
+    await page.pause();
+
+})
+
+test("draganddrop", async ({page})=>{
+    await page.goto("https://www.globalsqa.com/demo-site/draganddrop/");
+
+    let fl = page.frameLocator("div[rel-title='Photo Manager'] iframe");
+    //let src =  page.locator("img[src='images/high_tatras_min.jpg']");
+    let src = fl.locator("#gallery li").nth(0);
+    let target = fl.locator("div#trash");
+
+    //await page.dragAndDrop("#gallery li", "div#trash");
+
+    //click src
+    await src.hover();
+    await page.mouse.down();
+    await target.hover();
+    await page.mouse.up();
+
+    await page.pause();
+
+
+})
