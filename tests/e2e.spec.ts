@@ -1044,3 +1044,130 @@ test("draganddrop", async ({page})=>{
 
 
 })
+
+test("day19", async ({page})=>{
+
+    await page.goto("https://demo.evershop.io/account/login");
+    let op = await page.evaluate(()=>{
+        console.log("Akhil");        
+    })
+
+    await page.evaluate(([name])=>{
+        
+        const ele = document.querySelector("input[name='email']");
+        if(ele){
+            (ele as HTMLInputElement).value=name
+        }
+        },["akhil"])
+
+    //
+    let op1 = await page.evaluate(()=>{
+        return document.querySelector("input[name='email']").getAttribute('placeholder');
+    })
+
+    const ele2 =  page.locator("input[name='email']");
+    await ele2.evaluate((eleArg, arg)=>{ (eleArg as HTMLInputElement).value=arg}, "akhil Jain");
+
+    
+    console.log(op1);
+    await page.pause();
+})
+
+
+test("shadow-dom", async ({page})=>{
+    await page.goto("https://selectorshub.com/xpath-practice-page/", {timeout: 200000});
+    //await page.locator("input[id='kils']").fill("Akhil");
+
+    await page.locator("div[id='userName'] >>> input[id='kils']").fill("Akhil");
+
+    /*
+    await page.evaluate(()=>{
+        let shadowHost = document.querySelector("div[id='userName']");   
+        if(shadowHost)  {   
+            console.log("Host yes")
+        let shadowRoot = shadowHost?.shadowRoot;
+
+        if(shadowRoot){
+            console.log("Root yes")
+            shadowRoot.querySelector("input[id='kils']").value='PodTest'
+        }
+        }
+
+    })
+        */
+
+    //await page.locator("input[id='pwd']").fill("Podtest");
+
+    await page.pause();
+})
+
+test("JS", async ({page})=>{
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    //await page.locator("input[name='email']").fill("akhil");
+
+    //await page.locator("input[name='email']").click();
+    //await page.keyboard.type("Akhil")
+
+
+    
+
+    //JS at page level
+    /*
+    await page.evaluate(
+        //(arg)=>{document.querySelector("input[name='email']").value=arg.name;},
+        //{name: 'Akhil',surname: 'jain' })
+        (arg)=>{document.querySelector("input[name='email']").value=arg[0];},
+        ['akhil', 'jain']);
+        */
+
+    let email =  page.locator("input[name='email']");
+
+    await email.evaluate(
+           //convert Locator into HTMLELement 
+        (ele ,arg)=>{
+            ele.value=arg;
+
+        }, 
+        'akhil' )
+
+    await page.pause();
+
+})
+
+test("sd", async ({page})=>{
+    await page.goto("https://selectorshub.com/xpath-practice-page/");
+
+    //App1
+    //await page.locator("input[id='kils']").fill("Akhil Jain");
+
+    //appr2
+    /*
+    await page.evaluate(()=>{
+        let shadowHost = document.querySelector("div#userName");
+        let shadowRoot = shadowHost?.shadowRoot;
+        if(shadowRoot){
+            shadowRoot.querySelector("input[id='kils']").value='Akhil'
+        }
+        
+    })
+        */
+
+    //Appr3   >>> piercing
+    await page.locator("div#userName >>> input[id='kils']").fill("PodTEst");
+
+
+
+    await page.pause();
+})
+
+test("scr", async ({page})=>{
+    await page.goto("https://testautomationpractice.blogspot.com/");
+
+    await page.evaluate(()=>{
+        document.querySelector("select#colors").scrollTo(0,document.querySelector("select#colors").clientHeight);
+    })
+
+    await page.pause();
+})
