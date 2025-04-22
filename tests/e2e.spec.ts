@@ -1,4 +1,4 @@
-import {BrowserContext, Cookie, Page, test, Browser} from '@playwright/test';
+import {BrowserContext, Cookie, Page, test, Browser, expect} from '@playwright/test';
 
 /*
 test.use({navigationTimeout: 30000,
@@ -1171,3 +1171,88 @@ test("scr", async ({page})=>{
 
     await page.pause();
 })
+
+test("expect", async ({page})=>{
+
+   let expectedValue = 'Akhil';
+
+    await page.goto("https://demo.evershop.io/account/login");
+    //let actual = await page.locator(".login-form-inner h1").innerText();
+
+    //expect(actual).toEqual(expectedValue);
+
+    await expect(page.locator(".login-form-inner h1")).toHaveText(expectedValue);
+})
+
+test("generic expect", async ()=>{
+
+    let expectedValue = {id: 34, name: 'Akhil'};
+    let actualValue = {id: 34, name: 'Akhil'};
+
+    /*
+    let actualArray = [5, 8, 'Akhil'];
+    let expectedArray = [8];
+
+    expect(actualArray).toEqual(expect.arrayContaining(expectedArray));    
+    */
+
+    let actualObject = {id: 34, name: 'Akhil'};
+    let expectedObject = {name: 'Akhil'};
+
+    expect(actualObject).toHaveProperty('name', 'Akhil' );
+    expect(actualObject).toEqual(expect.objectContaining(expectedObject)); 
+
+    expect(actualObject).not.toEqual(expect.objectContaining(expectedObject)); //P/F    
+
+    let actualString = "Learning Playwright with PodTest";
+    let expectedString = "PodTest";
+
+    expect(actualString).toEqual(expect.stringContaining(expectedString)); 
+
+
+    let name = undefined;
+
+    let age = null;
+
+    let isValid = true;
+
+    let marks = 49;
+
+    expect(name).toBeUndefined();
+    expect(age).toBeNull();
+
+    expect(isValid).toBeFalsy();
+
+    expect(marks).toBeGreaterThanOrEqual(50);
+
+
+
+    //expect(actualValue).toEqual(expectedValue); // {id: 34, name: 'Akhil'} == {id: 34, name: 'Akhil'}
+    //expect(actualValue).toBe(expectedValue);  // {id: 34, name: 'Akhil'} === {id: 34, name: 'Akhil'}
+
+ 
+  
+ })
+
+
+ test('locator assertion', async ({page})=>{
+
+    await page.goto("https://demo.evershop.io/account/login");
+
+    await expect.soft(page).toHaveTitle("Login123");
+
+    console.log("Akhil Jain PodTest");
+    await expect.soft(page).toHaveURL("https://demo.evershop.io/account/login");
+
+
+    //let isEnabled = await page.locator("input[name='email']").isEnabled();
+
+    //let expectedEnabled = true;
+    //expect(isEnabled).toEqual(true);
+    //expect(isEnabled).toBeTruthy();
+
+
+    //await expect(page.locator("input[name='email']")).toBeEditable();
+
+    //await expect(page.locator("//a[contains(@href,'reset')]")).not.toContainText('password');
+ })
