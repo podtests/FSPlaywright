@@ -1235,14 +1235,85 @@ test("generic expect", async ()=>{
  })
 
 
- test('locator assertion', async ({page})=>{
+ test.only('screen1', async ({page}, testInfo)=>{
+
+    await page.goto("https://youtube.com");
+  
+    /*await expect.soft(page).toHaveTitle("Login");
+
+    console.log("Akhil Jain PodTest");
+    await expect.soft(page).toHaveURL("https://demo.evershop.io/account/login");  
+*/
+   
+
+    /*
+    await testInfo.attach('screenshot2', {
+        
+        body: eleScreenshot,
+        contentType: 'image/png'
+    })
+        */
+
+    
+
+
+    //let isEnabled = await page.locator("input[name='email']").isEnabled();
+
+    //let expectedEnabled = true;
+    //expect(isEnabled).toEqual(true);
+    //expect(isEnabled).toBeTruthy();
+
+
+    //await expect(page.locator("input[name='email']")).toBeEditable();
+
+    //await expect(page.locator("//a[contains(@href,'reset')]")).not.toContainText('password');
+ })
+
+
+ test.afterEach(async ({page},testInfo)=>{
+
+    if(testInfo.status == 'passed'){
+
+        let screen1 = await page.screenshot({
+            fullPage: true
+        });
+
+        await testInfo.attach('screenshot1', {
+            
+            body: screen1,
+            contentType: 'image/png'
+        })
+    }
+ })
+
+ test.only('screen2', async ({page}, testInfo)=>{
 
     await page.goto("https://demo.evershop.io/account/login");
 
-    await expect.soft(page).toHaveTitle("Login123");
+    await expect.soft(page).toHaveTitle("Login");
 
     console.log("Akhil Jain PodTest");
-    await expect.soft(page).toHaveURL("https://demo.evershop.io/account/login");
+    await expect.soft(page).toHaveURL("https://demo.evershop.io/account/login");  
+
+    let screenshot1 = await page.screenshot({
+        fullPage: true
+    });
+
+    let eleScreenshot = await page.locator("//button[@type='submit']").screenshot();
+
+    await testInfo.attach('screenshot3', {
+        
+        body: screenshot1,
+        contentType: 'image/png'
+    })
+
+    await testInfo.attach('screenshot4', {
+        
+        body: eleScreenshot,
+        contentType: 'image/png'
+    })
+
+    
 
 
     //let isEnabled = await page.locator("input[name='email']").isEnabled();
