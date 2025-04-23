@@ -2,14 +2,14 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
 
-  testDir: './tests',
+  testDir: './tests/specs',
   
-  fullyParallel: true,
+  fullyParallel: false,
   globalTimeout: 360000,
-  timeout: 200*1000,
+  timeout: 200*1000,  //testcase
   globalSetup: require.resolve('./globalsetup.ts'),
   globalTeardown: require.resolve('./globalteardown.ts'),
-  testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
+  //testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
   
   //testIgnore: ['tests/tf2.spec.ts'],
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -17,32 +17,32 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : 2,
+  workers: process.env.CI ? 1 : 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-     baseURL: 'https://youtube.com',
+     baseURL: 'https://demo.evershop.io/',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on',
+    //trace: 'on',
     headless: false, 
     //navigationTimeout: 40000,
     //actionTimeout: 30000,
-    video: 'on',
+    //video: 'on',
     screenshot: 'on'    
   },
 
   /* Configure projects for major browsers */
   projects: [
-
-    /*{
+/*
+    {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    */
+    
 
     {
         name: 'setupproject',
@@ -60,39 +60,25 @@ export default defineConfig({
       },
       testMatch: ['tests/tf4.spec.ts']
     },
+    */
 
 
     {
-      name: 'chrome-Brand-Browser',
-      use: { ...devices['Desktop Chrome'], channel: "chrome",
-        baseURL: "https://udemy.com"
-      }, 
-      dependencies: ['setupproject'],
-      testMatch: ['tests/tf1.spec.ts'],
-      teardown:  'tearDownproject'   
-      //testMatch: "./tests/dummy.*"
+      name: 'chromeTest',
+      use: { ...devices['Desktop Chrome'], channel: "chrome",        
+      }        
       
     },
 
     {
-      name: 'chrome',
-      use: { ...devices['Desktop Chrome'], channel: "chrome",
-        baseURL: "https://udemy.com"
-      },     
-      testMatch: ['tests/e2e.spec.ts'],    
-      //testMatch: "./tests/dummy.*"
-      
+      name: 'firefox',
+      use: { ...devices['Desktop Firefox'] },
     },
 
-    //{
-     // name: 'firefox',
-     // use: { ...devices['Desktop Firefox'] },
-    //},
-
-    /*{
+    {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },*/
+    },
 
     /* Test against mobile viewports. */
     // {
