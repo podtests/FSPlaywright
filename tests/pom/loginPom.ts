@@ -1,7 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import HomePOM from "./homePom";
 
-
 export default class LoginPom { 
     
     private userNameTB: Locator;
@@ -35,6 +34,12 @@ export default class LoginPom {
     public async clickSubmit(): Promise<HomePOM>{
         await this.submitBtn.click();
         return new HomePOM(this.page);
+    }
+
+    public async submitCredentials(userName: string, password: string): Promise<HomePOM> {
+        await this.fillUserName(userName);
+        await this.fillPassword(password);
+        return await this.clickSubmit();
     }
 
 }

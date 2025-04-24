@@ -1,4 +1,5 @@
 import { Locator, Page } from "@playwright/test";
+import ProductPOM from "./productPom";
 
 export default class HomePOM {
 
@@ -10,7 +11,8 @@ export default class HomePOM {
         this.productLink = this.page.locator("//div[contains(@class,'product-name')]/a[contains(@href,'nike-react-infinity-run')]");
     }
     
-    public async clickProductLink() {
+    public async clickProductLink(): Promise<ProductPOM> {
         await this.productLink.click();
+        return new ProductPOM(this.page);
     }
 }

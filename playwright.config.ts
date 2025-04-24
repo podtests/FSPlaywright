@@ -6,7 +6,7 @@ export default defineConfig({
   
   fullyParallel: false,
   globalTimeout: 360000,
-  timeout: 200*1000,  //testcase
+  timeout: 40*1000,  //testcase
   globalSetup: require.resolve('./globalsetup.ts'),
   globalTeardown: require.resolve('./globalteardown.ts'),
   //testMatch: ['tests/tf1.spec.ts'],  //relative to the config file
