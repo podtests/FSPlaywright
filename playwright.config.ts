@@ -27,11 +27,11 @@ export default defineConfig({
      baseURL: 'https://demo.evershop.io/',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    //trace: 'on',
+    trace: 'on',
     headless: false, 
     //navigationTimeout: 40000,
     //actionTimeout: 30000,
-    //video: 'on',
+    video: 'on',
     screenshot: 'on'    
   },
 

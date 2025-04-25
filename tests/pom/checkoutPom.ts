@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import SuccessPOM from "./successPom";
+import CheckoutInputDao from "../dao/inputDao/checkoutInputDao";
 
 export default class CheckoutPOM{
     private page: Page;
@@ -32,7 +33,17 @@ export default class CheckoutPOM{
         //(//div[contains(@class,'payment-method-list')]//a)[1]
     }
 
-    public async selectDeliveryMethod(deliveryMethod: string): Promise<CheckoutPOM>{
+    public async completeCheckoutProceding(checkoutInputDao: CheckoutInputDao): Promise<SuccessPOM> {
+        await this.fillAddressDetails(checkoutInputDao.getFullName(), checkoutInputDao.getTelephone(),
+            checkoutInputDao.getAddress(), checkoutInputDao.getCity(), checkoutInputDao.getPostcode(),
+        checkoutInputDao.getCountry(), checkoutInputDao.getProvince() );
+        await this.selectShippingMethod(checkoutInputDao.getDeliveryMethod());
+        await this.clickContinueToPayment();
+        await this.selectDeliveryMethod(checkoutInputDao.getPaymentMethod());
+        return await this.clickPlaceOrderButton();
+    }
+
+    public async selectDeliveryMethod(deliveryMethod: string): Promise<CheckoutPOM>{        
         let finalDeliveryMethod : string;
         if(deliveryMethod.toLowerCase().includes("cash")){
             finalDeliveryMethod = this.deliveryMethod.replace("$$", "Cash On Delivery");

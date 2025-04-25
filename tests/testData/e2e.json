@@ -1,0 +1,31 @@
+{
+    "TC1": {
+        "login": {
+            "username": "akhiljda@gmail.com", 
+            "password": "Password"
+        },
+        "home": {
+            "productName": "nike-react-infinity-run"
+        },
+        "product": {
+            "size": "M",
+            "color": "Green",
+            "quantity": "3"
+        },
+        "checkout": {
+            "fullName":"Akhil Jain",
+            "telephone": "20089765",
+            "address": "Delhi",
+            "city": "Gzb",
+            "country": "United States",
+            "province": "Alabama",
+            "postcode": "110099",
+            "deliveryMethod":"standard",
+            "paymentMethod": "cash"
+        }
+        
+    },
+    "TC2": {
+        
+    }
+}

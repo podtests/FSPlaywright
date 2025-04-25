@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import CartPOM from "./cartPom";
+import ProductInputDao from "../dao/inputDao/productInputDao";
 
 export default class ProductPOM {
 
@@ -19,10 +20,10 @@ export default class ProductPOM {
         this.viewCartBtn = this.page.locator("a.add-cart-popup-button");
     }
 
-    public async fillProductDetails(size: string, color: string, qty: string ): Promise<CartPOM> {
-        await this.selectSize(size);
-        await this.selectColor(color);
-        await this.fillQuantity(qty);
+    public async fillProductDetails(productInputDao: ProductInputDao): Promise<CartPOM> {
+        await this.selectSize(productInputDao.getSize());
+        await this.selectColor(productInputDao.getColor());
+        await this.fillQuantity(productInputDao.getQuantity());
         await this.clickAddToCartButton();
         return await this.clickViewCartButton();
     }

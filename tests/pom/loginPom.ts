@@ -1,5 +1,6 @@
 import { Locator, Page } from "@playwright/test";
 import HomePOM from "./homePom";
+import LoginInputDao from "../dao/inputDao/loginInputDao";
 
 export default class LoginPom { 
     
@@ -36,9 +37,9 @@ export default class LoginPom {
         return new HomePOM(this.page);
     }
 
-    public async submitCredentials(userName: string, password: string): Promise<HomePOM> {
-        await this.fillUserName(userName);
-        await this.fillPassword(password);
+    public async submitCredentials(loginInputDao: LoginInputDao): Promise<HomePOM> {
+        await this.fillUserName(loginInputDao.getUserName());
+        await this.fillPassword(loginInputDao.getPassword());
         return await this.clickSubmit();
     }
 
