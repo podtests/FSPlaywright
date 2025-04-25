@@ -32,10 +32,14 @@ export default class ProductPOM {
         return sizeTypeLocator;       
       }
 
-    public async selectSize(size: string): Promise<ProductPOM>{         
+    public async selectSize(size: string): Promise<ProductPOM>{    
+        await this.page.waitForLoadState("load");
         let sizeLocator =  this.createSizeLocator(size);
-        await sizeLocator.click();       
-        await expect(sizeLocator.locator("//parent::li")).toHaveClass("selected");                    
+        await sizeLocator.click();
+        await sizeLocator.locator("//parent::li[@class='selected']").waitFor({state: 'visible'});
+        //(//ul[contains(@class,'variant-option-list')])[1]/li/a[text()='M']
+        //await sizeLocator.locator("//parent::li[contains(@class,'selected')]").waitFor({state: 'attached'}); 
+        //await expect(sizeLocator.locator("//parent::li")).toHaveClass("selected");                    
         return this;  
     }
 
@@ -46,8 +50,10 @@ export default class ProductPOM {
 
     public async selectColor(color: string): Promise<ProductPOM>{   
         let colorLocator =  this.createColorLocator(color);
-        await colorLocator.click();       
-        await expect(colorLocator.locator("//parent::li")).toHaveClass("selected");                
+        await colorLocator.click();    
+        await colorLocator.locator("//parent::li[@class='selected']").waitFor({state: 'visible'});  
+        //await colorLocator.locator("//parent::li[contains(@class,'selected')]").waitFor({state: 'attached'}); 
+        //await expect(colorLocator.locator("//parent::li")).toHaveClass("selected");                
         return this;   
     }
 
