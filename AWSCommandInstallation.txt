@@ -1,0 +1,29 @@
+dnf update -y
+
+-- Git
+dnf install git -y
+git --version
+
+---chrome browser
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+dnf localinstall ./google-chrome-stable_current_x86_64.rpm
+google-chrome --version
+
+//Install nodejs & npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.bashrc
+
+nvm install 22
+nvm use 22
+
+//Playwright
+cd FSPlaywright
+npm install
+npx playwright install 
+
+//Run test [headless]
+npx playwright test --project=chrome
+
+
+npx playwright show-report
