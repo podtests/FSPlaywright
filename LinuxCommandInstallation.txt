@@ -1,0 +1,26 @@
+//Update Repo
+dnf update -y
+
+//Install Git
+dnf install git -y
+git --version
+
+//Node JS installed
+sudo dnf module enable nodejs:22
+sudo dnf install nodejs -y
+
+node --version
+npm -v
+
+
+//chrome browser
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+dnf localinstall ./google-chrome-stable_current_x86_64.rpm
+google-chrome --version
+
+----genearte 
+ssh-keygen
+cd .ssh
+//private key: keep it with yourself
+//public key: copy it to github ssh
