@@ -1,3 +1,5 @@
+sudo su
+
 dnf update -y
 
 -- Git
@@ -7,7 +9,7 @@ git --version
 ---chrome browser
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 
-dnf localinstall ./google-chrome-stable_current_x86_64.rpm
+dnf localinstall ./google-chrome-stable_current_x86_64.rpm -y
 google-chrome --version
 
 //Install nodejs & npm
@@ -17,13 +19,30 @@ source ~/.bashrc
 nvm install 22
 nvm use 22
 
+----genearte 
+ssh-keygen
+cd .ssh
+//private key: keep it with yourself
+//public key: copy it to github ssh
+
 //Playwright
 cd FSPlaywright
 npm install
 npx playwright install 
 
+git checkout day26
+
 //Run test [headless]
-npx playwright test --project=chrome
+npx playwright test --project=chromeTest
 
+//connect S3 bucket to EC2:
+Create s3 bucket with name 'playwright-akhil'
+enable public access
+attach policy to all resources
 
-npx playwright show-report
+Create IAM Role for EC2
+Attach the role to EC2
+
+Now run cmd from EC2:
+aws s3 sync playwright-report s3://playwright-akhil/
+
