@@ -1,0 +1,117 @@
+//Create EC2 instance
+-- Create a keypair while creating th instance.
+-- install below things on instnace:
+
+sudo su
+dnf update -y
+
+---chrome browser
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+dnf localinstall ./google-chrome-stable_current_x86_64.rpm -y
+google-chrome --version
+
+- Java
+dnf install java-17-amazon-corretto-devel -y
+java -version
+
+- Git
+dnf install git -y
+git --version
+
+- Node 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.bashrc
+
+nvm install 22
+nvm use 22
+
+dnf install nodejs npm
+
+- ssh-key for Git cloning: pvt & public [copy this & paste in github]
+ssh-keygen
+cd /root/.ssh
+//private key: keep it with yourself
+//public key: copy it to github ssh
+
+
+//connect S3 bucket to EC2:
+Create s3 bucket with name 'playwright-akhil'
+enable public access
+attach policy to all resources
+
+Create IAM Role for EC2
+Attach the role to EC2
+
+//On Jenkins:
+add Amazon Ec2 plugin
+create a credential using ssh with password as the content of the keypair file with username as ec2-user
+Add a Node for Ec2 & disable the built-in node
+
+
+update path of below softwares in jenkins configuration:
+- Java
+- Git
+
+--local:
+C:\Program Files\Git\bin\git.exe
+C:\Program Files\apache-maven-3.8.7
+C:\Program Files\allure-2.29.0
+C:\Program Files\OpenLogic\jdk-17.0.10.7-hotspot
+
+--AWS:
+use command to know the path as:
+whereis java  
+/usr/bin/java
+whereis git 
+/usr/bin/git
+
+-- create a Job & put below commands in it:
+
+--for Windows machine
+npm install && npx playwright install && npx playwright test --project=chromeTest
+
+-- for Linux machine:
+npm install && npx playwright install && npx playwright test --project=chromeTest
+
+-- in post-build section, add belwo command:
+aws s3 sync playwright-report s3://playwright-akhil-bucket/
+
+//Extra:
+---install maven:
+dnf install maven -y
+
+--- install allure:
+wget https://github.com/allure-framework/allure2/releases/download/2.30.0/allure-2.30.0.tgz
+tar -zxvf allure-2.30.0.tgz -C /opt/
+vi /etc/profile.d/allure.sh
+export PATH=/opt/allure-2.30.0/bin:${PATH}
+source /etc/profile.d/allure.sh
+allure --version
+
+//Selenium Grid
+wget https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.24.0/selenium-server-4.24.0.jar
+java -jar selenium-server-4.24.0.jar standalone
+
+---Jenkins pipeline script:
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Product Build'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Product Deployed'
+            }
+        }
+        stage('Test'){
+            steps {
+                git branch: 'day26', changelog: false, credentialsId: '1b2fd392-59f0-4634-b08e-7f646b23dcd2', poll: false, url: 'git@github.com:podtests/FSPlaywright.git'
+                sh 'npm install && npx playwright install && npx playwright test --project=chromeTest && aws s3 sync playwright-report s3://playwright-akhil-bucket/'
+            }
+        }
+    }
+}

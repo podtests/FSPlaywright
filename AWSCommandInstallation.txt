@@ -1,5 +1,4 @@
 sudo su
-
 dnf update -y
 
 -- Git
