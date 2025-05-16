@@ -65,6 +65,8 @@ whereis java
 whereis git 
 /usr/bin/git
 
+/home/ec2-user/.nvm/versions/node/v22.15.0/bin/node
+
 -- create a Job & put below commands in it:
 
 --for Windows machine
